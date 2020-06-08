@@ -3,8 +3,8 @@ import numpy as np
 #Function returns True if given array contains given element.
 #Otherwise returns False
 def isInArray(array, x):
-    for a in array:
-        if a[0]==x[0] and a[1]==x[1]:
+    for item in array:
+        if item[0]==x[0] and item[1]==x[1]:
             return True
     return False
 

@@ -18,10 +18,7 @@ class ZPfield():
         return ZPfield((self.x * other.x)%self.p,self.p)
 
     def __eq__(self, other):
-        if self.x == other.x:
-            return True
-        else:
-            return False
+        return True if self.x == other.x else False
 
     def __str__(self):
         return str(self.x)
@@ -74,10 +71,7 @@ class ZPIfield():
         return str(self.x)
 
     def __eq__(self, other):
-        if self.x[0].x==other.x[0].x and self.x[1].x==other.x[1].x:
-            return True
-        else:
-            return False
+        return True if self.x[0].x==other.x[0].x and self.x[1].x==other.x[1].x else False
 
     def __hash__(self):
         return hash(str(self.x))
@@ -152,15 +146,13 @@ class EllipticCurvePoint():
         elements = [ZPIfield(i, j, self.p) for i in range(self.p) for j in range(self.p)]
         points = []
         num_elements = len(elements)
-        i = 0
-        for e in elements:
+        for index,e in enumerate(elements):
             var = e*e*e + e*self.coeffs[3] + self.coeffs[4]
             if var in self.squares :
                 for e_i in self.squares[var]:
                     points.append(np.array([e,e_i]))
-            i = i+1
-            if i%100==0:
-                print(str(i*100//num_elements) + '% elementow przetworzono')
+            if index%100==0:
+                print(str(index*100//num_elements) + '% elementow przetworzono')
         return np.array(points)
 
     def equation(self):
@@ -175,7 +167,7 @@ class EllipticCurvePoint():
         for i in itr:
             if Q[0] == minus_P[0] and Q[1] == minus_P[1]:
                 if i == m - 2:
-                    return 0
+                    return 0 #this means that function returns point at infinity
                 Q = P
                 next(itr, None)
             else:
@@ -194,9 +186,7 @@ class EllipticCurvePoint():
         return np.array(subgroup)
 
     def secret_cyclic_subgroup(P, rank, path, el):
-        cyclic_subgroup = []
-        for i in range(rank - 1):
-            cyclic_subgroup.append(el.m_mltpl(i + 1, P))
+        cyclic_subgroup = [el.m_mltpl(i + 1, P) for i in range(rank-1)]
         st.serialize_points(path, np.array(cyclic_subgroup))
 
     #evaluates rank of given point
@@ -214,16 +204,14 @@ class EllipticCurvePoint():
     def points4rank(self, m, points):
         subgroup = []
         points_num = len(points)
-        i = 0
-        for P in points:
+        for index,P in enumerate(points):
             minus_P = self.opposite(P)
             Q = self.m_mltpl(m - 1, P)
             if Q != 0:
                 if minus_P[0] == Q[0] and minus_P[1] == Q[1]:
                     subgroup.append(P)
-            i = i + 1
-            if i % 100 == 0:
-                print('Przetworzono ' + str(100 * i / points_num) + '% punktow.')
+            if index % 100 == 0:
+                print('Przetworzono ' + str(100 * index / points_num) + '% punktow.')
         return np.array(subgroup)
 
     def j_invariant(self):
