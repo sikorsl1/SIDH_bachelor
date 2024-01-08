@@ -1,3 +1,7 @@
+# Warning!
+
+This code was written 3000 years ago. Please, do not judge my coding skills base on this code :)
+
 # SIDH_bachelor
 Implementation of arithmetic on elliptic curves and Velu algorithm.
 
